@@ -16,6 +16,74 @@ public class GamePole : MonoBehaviour
     // pole 10 na 10
     int lengPole = 10;
 
+    //количество кораблей на поле
+    public int[] ShipsCount = { 0, 4, 3, 2, 1 };
+
+    bool CountShips()
+    {
+        //обьявляем переменную для подсчета кораблей
+        int Amaunt = 0;
+
+        //суммируем все значения
+        foreach (int Ship in ShipsCount) Amaunt += Ship;
+
+        //если сумма не ноль значит ещё что ставить на поле
+        if (Amaunt != 0) return true;
+
+        //если сумма получилась 0 значит корабли кончились 
+        return false;
+    }
+        //функция очистки поля игры
+    void ClearPole()
+    {
+        //возвращаем корабли в ангар
+        ShipsCount = new int[] { 0, 4, 3, 2, 1 }; //записываем количество кораблей
+
+        //цикл отрисовки поля по Y
+        for (int Y = 0; Y < lengPole; Y++)
+        { 
+            //цикл открисовки поля по X
+            for (int X=0;X<lengPole; X++)
+            {
+                Pole[X, Y].GetComponent<Chanks>().Index = 0;
+            }
+        }
+    }
+
+    void EnterRandomShip()
+    {
+        ClearPole();
+        //номер выбранного корбля
+        int SelectShip = 4;
+
+        //координаты по которым будем ставить корабль
+        int X, Y;
+        //полжение корабля на поле вертикаль горизонталь
+        int Direction;
+
+        while (CountShips())
+        {
+            //получаем 2 координаты по которым будем ставить корабль
+            X = Random.Range(0, 10); //позиция по X
+            Y = Random.Range(0, 10); //позиция по Y
+            //получаем направления 0 вертикаль 1 горизонталь
+            Direction = Random.Range(0, 2);
+            if (EnterDeck(SelectShip, Direction, X, Y)) 
+            {
+                //если получилось установить то уменьшаем количество кораблей
+                ShipsCount[SelectShip]--;
+                //если у нас закончились корабли данного типа то выбираем следующие
+                if (ShipsCount[SelectShip] == 0)
+                {
+                    //смещаемся на следующую группу кораблей
+                    SelectShip--;
+                }
+            }
+
+        }
+    }
+
+
     struct TestCoord
     {
         public int X, Y;
@@ -187,6 +255,7 @@ public class GamePole : MonoBehaviour
     public void WhoClick(int X, int Y)
     {
         //  if (TestEnterDeck(X,Y)) Pole[X, Y].GetComponent<Chanks>().Index = 1;
-        EnterDeck(1, 1, X, Y);
+        //EnterDeck(1, 1, X, Y);
+        EnterRandomShip();
     }
 }
