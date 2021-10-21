@@ -33,12 +33,13 @@ public class GamePole : MonoBehaviour
         //если сумма получилась 0 значит корабли кончились 
         return false;
     }
+
         //функция очистки поля игры
     void ClearPole()
     {
         //возвращаем корабли в ангар
         ShipsCount = new int[] { 0, 4, 3, 2, 1 }; //записываем количество кораблей
-
+        ListShip.Clear();
         //цикл отрисовки поля по Y
         for (int Y = 0; Y < lengPole; Y++)
         { 
@@ -89,6 +90,12 @@ public class GamePole : MonoBehaviour
         public int X, Y;
     }
 
+    struct Ship
+    {
+        public TestCoord[] ShipCoord;
+    }
+
+    List<Ship> ListShip = new List<Ship>();
     void CreatePole()
     {
         Vector3 StartPoze = transform.position;
@@ -236,6 +243,15 @@ public class GamePole : MonoBehaviour
             {
                 Pole[T.X, T.Y].GetComponent<Chanks>().Index = 1;
             }
+
+            Ship Deck;
+            //сохраняем его координаты
+            Deck.ShipCoord = P;
+
+            //сохраняем корабль в список
+            ListShip.Add(Deck);
+
+            //сообщаем что мы поставили корабль
             return true;
         }
         return false;
@@ -244,6 +260,8 @@ public class GamePole : MonoBehaviour
     void Start()
     {
         CreatePole();
+
+        EnterRandomShip();
     }
 
     void Update()
@@ -256,6 +274,56 @@ public class GamePole : MonoBehaviour
     {
         //  if (TestEnterDeck(X,Y)) Pole[X, Y].GetComponent<Chanks>().Index = 1;
         //EnterDeck(1, 1, X, Y);
-        EnterRandomShip();
+        Shoot(X, Y);
     }
+
+    bool Shoot(int X, int Y)
+    {
+        int PoleSelect = Pole[X, Y].GetComponent<Chanks>().Index;
+        bool Result = false;
+        switch (PoleSelect)
+        {
+            //промах
+            case 0:
+                Pole[X, Y].GetComponent<Chanks>().Index = 2;
+                Result = false;
+                break;
+            //попадание
+            case 1:
+                Pole[X, Y].GetComponent<Chanks>().Index = 3;
+                Result = true;
+                break;
+        }
+        return Result;
+    }
+
+    //функция попадания по кораблю
+    bool TestShoot(int X, int Y)
+    {
+        bool Result = false;
+        foreach (Ship Test in ListShip)
+        {
+            foreach (TestCoord Paluba in Test.ShipCoord)
+            {
+                if ((Paluba.X == X) && (Paluba.Y == Y))
+                {
+                    int CountKill = 0;
+                    foreach (TestCoord KillPaluba in Test.ShipCoord)
+                    {
+                        int TestBlock = Pole[KillPaluba.X, KillPaluba.Y].GetComponent<Chanks>().Index;
+                        if (TestBlock == 3) CountKill ++;
+                    }
+                    if (CountKill == Test.ShipCoord.Length)
+                        Result = true;
+                    else
+                        Result = false;
+
+                    return Result;
+                }
+            }
+        }
+        return Result;
+    }
+
+
 }
