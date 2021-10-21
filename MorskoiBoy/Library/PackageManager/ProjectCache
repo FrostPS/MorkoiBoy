@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637700033392282195
-    m_Hash: 3042208005
+      ticks: 637704296532929221
+    m_Hash: 356985750
   m_LockFileStatus:
     m_FilePath: C:/Users/MrNik/Desktop/MorskoiBOYNEXTDOOR/MorkoiBoy/MorkoiBoy/MorskoiBoy/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637700034164056673
-    m_Hash: 564942281
+      ticks: 637704296532939203
+    m_Hash: 2468561162
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
