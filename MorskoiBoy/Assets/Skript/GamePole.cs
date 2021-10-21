@@ -5,11 +5,11 @@ using UnityEngine;
 public class GamePole : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject eLiters, eNums, ePole;
+    public GameObject eLitters, eNumbers, ePole;
     //список букв
-    GameObject[] Liters;
+    GameObject[] Litters;
     //список цифр
-    GameObject[] Nums;
+    GameObject[] Numbers;
     //поле игр
     GameObject[,] Pole;
 
@@ -22,21 +22,24 @@ public class GamePole : MonoBehaviour
 
         float XX = StartPoze.x + 1;
         float YY = StartPoze.y - 1;
+        float ZZ = StartPoze.z - 1;
 
-        Liters = new GameObject[lengPole];
-        Nums = new GameObject[lengPole];
-        
+        Litters = new GameObject[lengPole];
+        Numbers = new GameObject[lengPole];
+
         // nadpisi dlya igri
-        for(int Nadpis = 0; Nadpis < lengPole; Nadpis++)
+
+        for (int Nadpis = 0; Nadpis < lengPole; Nadpis++)
+
         {
-            Liters[Nadpis] = Instantiate(eLiters);
-            Liters[Nadpis].transform.position = new Vector3(XX, StartPoze.y, StartPoze.z);
-            Liters[Nadpis].GetComponent<Chanks>().Index = Nadpis;
+            Litters[Nadpis] = Instantiate(eLitters);
+            Litters[Nadpis].transform.position = new Vector3(XX, StartPoze.y, StartPoze.z);
+            Litters[Nadpis].GetComponent<Chanks>().Index = Nadpis;
             XX++;
 
-            Nums[Nadpis] = Instantiate(eNums);
-            Nums[Nadpis].transform.position = new Vector3(StartPoze.x, YY, StartPoze.z);
-            Nums[Nadpis].GetComponent<Chanks>().Index = Nadpis;
+            Numbers[Nadpis] = Instantiate(eNumbers);
+            Numbers[Nadpis].transform.position = new Vector3(StartPoze.x, YY, StartPoze.z);
+            Numbers[Nadpis].GetComponent<Chanks>().Index = Nadpis;
             YY--;
 
 
@@ -44,6 +47,7 @@ public class GamePole : MonoBehaviour
 
         XX = StartPoze.x + 1;
         YY = StartPoze.y - 1;
+        ZZ = StartPoze.z - 1;
 
         Pole = new GameObject[lengPole, lengPole];
 
@@ -57,31 +61,34 @@ public class GamePole : MonoBehaviour
                 Pole[X, Y] = Instantiate(ePole);
                 Pole[X, Y].GetComponent<Chanks>().Index = 0;
                 Pole[X, Y].transform.position = new Vector3(XX, YY, StartPoze.z);
+
+                Pole[X, Y].GetComponent<ClickPole>().WhoPerent = this.gameObject;
+
+                Pole[X, Y].GetComponent<ClickPole>().CoordX = X;
+                Pole[X, Y].GetComponent<ClickPole>().CoordY = Y;
+
                 XX++;
             }
-            XX = StartPoze.x +1;
+            XX = StartPoze.x + 1;
             YY--;
         }
 
 
-
-
-
-
-
-
-
     }
-
 
     void Start()
     {
         CreatePole();
     }
 
-    // Update is called once per frame
     void Update()
     {
 
+    }
+
+
+    public void WhoClick(int X, int Y)
+    {
+        Pole[X, Y].GetComponent<Chanks>().Index = 1;
     }
 }
