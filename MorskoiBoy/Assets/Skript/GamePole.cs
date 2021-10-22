@@ -6,6 +6,8 @@ public class GamePole : MonoBehaviour
 {
     // Start is called before the first frame update
     public GameObject eLitters, eNumbers, ePole;
+
+    public bool HideShip = false;
     //список букв
     GameObject[] Litters;
     //список цифр
@@ -140,6 +142,8 @@ public class GamePole : MonoBehaviour
             {
                 Pole[X, Y] = Instantiate(ePole);
                 Pole[X, Y].GetComponent<Chanks>().Index = 0;
+                Pole[X, Y].GetComponent<Chanks>().HideChank = HideShip;
+
                 Pole[X, Y].transform.position = new Vector3(XX, YY, StartPoze.z);
 
                 Pole[X, Y].GetComponent<ClickPole>().WhoPerent = this.gameObject;
@@ -147,6 +151,8 @@ public class GamePole : MonoBehaviour
                 Pole[X, Y].GetComponent<ClickPole>().CoordX = X;
                 Pole[X, Y].GetComponent<ClickPole>().CoordY = Y;
 
+
+                //HideShip
                 XX++;
             }
             XX = StartPoze.x + 1;
@@ -325,5 +331,18 @@ public class GamePole : MonoBehaviour
         return Result;
     }
 
+    public int LifeShip()
+    {
+        int countLife = 0;
+        foreach (Ship Test in ListShip)
+        {
+            foreach (TestCoord Paluba in Test.ShipCoord)
+            {
+                int TestBlock = Pole[Paluba.X, Paluba.Y].GetComponent<Chanks>().Index;
+                if (TestBlock == 1) countLife++;
+            }
+        }
+        return countLife;
+    }
 
 }
